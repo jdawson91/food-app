@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements OnConnectionFaile
             @TargetApi(Build.VERSION_CODES.M)
             @Override
             public void onClick(View v) {
+                placesText.setText("");
                 if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(MainActivity.this, " need permissions", Toast.LENGTH_SHORT).show();
                     ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
@@ -83,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements OnConnectionFaile
                     @Override
                     public void onResult(PlaceLikelihoodBuffer likelyPlaces) {
                         for (PlaceLikelihood placeLikelihood : likelyPlaces) {
-                             placesText.setText(String.format("Place '%s' has likelihood: %g",
+                             placesText.setText(placesText.getText() + String.format("\n Place: '%s' \n Has likelihood: %g",
                                      placeLikelihood.getPlace().getName(),
                                      placeLikelihood.getLikelihood()));
                         }
