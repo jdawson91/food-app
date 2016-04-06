@@ -18,7 +18,7 @@
 
     <TextView
         android:id="@+id/lonText"
-        android:text="Username:"
+        android:text=""
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/latText"
@@ -26,6 +26,28 @@
         android:textSize="25dp"
         />
 
+    <Button
+    android:id="@+id/getLoc"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/lonText"
+    android:text="Get Location"/>
+
+    <Button
+        android:id="@+id/getPlaces"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/getLoc"
+        android:text="Get Places"/>
+
+    <TextView
+        android:id="@+id/placesText"
+        android:text=""
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/getPlaces"
+        android:layout_alignParentLeft="true"
+        />
 
 </RelativeLayout>
 
