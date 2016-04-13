@@ -7,45 +7,20 @@
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
 
 
-    <TextView
-        android:id="@+id/latText"
-        android:text=""
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:textSize="25dp"
-        />
-
-    <TextView
-        android:id="@+id/lonText"
-        android:text=""
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/latText"
-        android:layout_alignParentLeft="true"
-        android:textSize="25dp"
-        />
-
-    <Button
-    android:id="@+id/getLoc"
+        <Button
+            android:id="@+id/rndLoc"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_below="@id/lonText"
-    android:text="Get Location"/>
+    android:text="Random Location"/>
 
-    <Button
-        android:id="@+id/getPlaces"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/getLoc"
-        android:text="Get Places"/>
+
 
     <TextView
         android:id="@+id/placesText"
         android:text=""
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/getPlaces"
+        android:layout_below="@id/rndLoc"
         android:layout_alignParentLeft="true"
         />
 

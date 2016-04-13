@@ -44,10 +44,7 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity implements OnConnectionFailedListener {
 
     //UI components
-    TextView mLatitudeText;
-    TextView mLongitudeText;
-    Button getLoc;
-    Button getPlaces;
+    Button rndLoc;
     Location mCurrentLocation;
     TextView placesText;
 
@@ -65,10 +62,7 @@ public class MainActivity extends AppCompatActivity implements OnConnectionFaile
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mLatitudeText = (TextView) findViewById(R.id.latText);
-        mLongitudeText = (TextView) findViewById(R.id.lonText);
-        getLoc = (Button) findViewById(R.id.getLoc);
-        getPlaces = (Button) findViewById(R.id.getPlaces);
+        rndLoc = (Button) findViewById(R.id.rndLoc);
         placesText = (TextView) findViewById(R.id.placesText);
         placesText.setMovementMethod(new ScrollingMovementMethod());
 
@@ -79,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements OnConnectionFaile
         }
 
 
-        getLoc.setOnClickListener(new View.OnClickListener() {
+        rndLoc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -103,8 +97,6 @@ public class MainActivity extends AppCompatActivity implements OnConnectionFaile
                 String latitude = String.valueOf(mCurrentLocation.getLatitude());
                 String longitude = String.valueOf(mCurrentLocation.getLongitude());
 
-                mLatitudeText.setText(latitude);
-                mLongitudeText.setText(longitude);
 
                 //build url based on location, radius and place type
                 //Build string of url
@@ -163,34 +155,6 @@ public class MainActivity extends AppCompatActivity implements OnConnectionFaile
             }
         });
 
-        getPlaces.setOnClickListener(new View.OnClickListener() {
-            @TargetApi(Build.VERSION_CODES.M)
-            @Override
-            public void onClick(View v) {
-                placesText.setText("");
-                if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(MainActivity.this, " need permissions", Toast.LENGTH_SHORT).show();
-                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-                    return;
-                }
-                PendingResult<PlaceLikelihoodBuffer> result = Places.PlaceDetectionApi
-                        .getCurrentPlace(mGoogleApiClient, null);
-                result.setResultCallback(new ResultCallback<PlaceLikelihoodBuffer>() {
-                    @Override
-                    public void onResult(PlaceLikelihoodBuffer likelyPlaces) {
-                        for (PlaceLikelihood placeLikelihood : likelyPlaces) {
-                             placesText.setText(placesText.getText() + String.format("\n Place: '%s' \n Has likelihood: %g",
-                                     placeLikelihood.getPlace().getName(),
-                                     placeLikelihood.getLikelihood()));
-                        }
-                        likelyPlaces.release();
-                    }
-                });
-
-
-
-            }
-        });
 
         // Create the location client to start receiving updates
         mGoogleApiClient = new GoogleApiClient.Builder(this)
