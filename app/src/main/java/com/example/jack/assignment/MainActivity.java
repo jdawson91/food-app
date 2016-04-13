@@ -10,6 +10,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -21,9 +22,14 @@ import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListe
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceLikelihood;
 import com.google.android.gms.location.places.PlaceLikelihoodBuffer;
 import com.google.android.gms.location.places.Places;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -33,6 +39,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements OnConnectionFailedListener {
 
@@ -48,8 +55,10 @@ public class MainActivity extends AppCompatActivity implements OnConnectionFaile
     private GoogleApiClient mGoogleApiClient;
     String placesApiSvrKey = "AIzaSyDgN0nSZgvQ_3ZZpF1NRka-VRwguKk8y7A";
     String radius = "2000";
-    String type = "restaurant";
+    String type = "bar";
     String placeData = "";
+    int numRes = 0;
+    JSONArray results;
 
 
     @Override
@@ -134,12 +143,19 @@ public class MainActivity extends AppCompatActivity implements OnConnectionFaile
                     placeData = "";
                     placeData = stringBuffer.toString();
                     bufferedReader.close();
-                    placesText.setText(placeData);
+
+                    JSONObject googlePlacesJson = new JSONObject((String) placeData);
+                    results = googlePlacesJson.getJSONArray("results");
+
+                    dispRndmPlace();
+
+                    // placesText.setText(placeData);
 
                 } catch (IOException e) {
                     e.printStackTrace();
-                }
-                finally{
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } finally{
                         con.disconnect();
                 }
 
@@ -186,6 +202,39 @@ public class MainActivity extends AppCompatActivity implements OnConnectionFaile
 
 
     }
+
+    public void dispRndmPlace() throws JSONException {
+
+        numRes = results.length();
+        String[] name = new String[numRes];
+        String[] addr = new String[numRes];
+        String[] photo = new String[numRes];
+        Double[] lat = new Double[numRes];
+        Double[] lng = new Double[numRes];
+
+
+        for(int i = 0; i < results.length(); i++) {
+            JSONObject result = results.getJSONObject(i);
+
+            name[i] = result.getString("name");
+            addr[i] = result.getString("vicinity");
+            JSONObject geometry = result.getJSONObject("geometry");
+            JSONObject location = geometry.getJSONObject("location");
+            lat[i] = location.getDouble("lat");
+            lng[i] = location.getDouble("lng");
+        }
+
+
+        Random random = new Random();
+        int rn = random.nextInt(numRes);
+        placesText.setText(placesText.getText() + "\n\n Name = " + name[rn]);
+        placesText.setText(placesText.getText() + "\n Address = " + addr[rn]);
+       // placesText.setText(placesText.getText() + "\n" + photo[rn]);
+        placesText.setText(placesText.getText() + "\n Coords = " + lat[rn] + ", "+ lng[rn]);
+
+
+    }
+
 
     protected void onStart() {
         mGoogleApiClient.connect();
